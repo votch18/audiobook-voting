@@ -41,12 +41,14 @@ const Home = () => {
           toast.error(message || 'An error occured while submitting vote.');
         }
 
-        const audioBook = audioBooks.filter(item => item.id === audioBookId)[0];
-        if (audioBook) {
-          audioBook.user_voted = true;
-          audioBook.vote_count = Number(audioBook.vote_count) + 1;
-          setAudioBooks(prev => [...prev, audioBook])
-        }
+        const newAudioBooks = audioBooks.map((item) => {
+          if (item.id === audioBookId) {
+            return {...item, user_voted: true, vote_count: Number(item.vote_count) + 1};
+          }
+          return item;
+        });
+
+        setAudioBooks(newAudioBooks);
       })
       .catch((err) => {
         toast.error(err?.message || 'An error occured while submitting vote.');
